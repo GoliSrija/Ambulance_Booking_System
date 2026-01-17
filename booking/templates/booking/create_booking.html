@@ -1,0 +1,20 @@
+<h2>Book Ambulance</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    Pickup Location:<br>
+    <input type="text" name="pickup"><br><br>
+
+    Drop Location:<br>
+    <input type="text" name="drop"><br><br>
+
+    Emergency Level:<br>
+    <select name="emergency">
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+    </select><br><br>
+
+    <button type="submit">Book</button>
+</form>

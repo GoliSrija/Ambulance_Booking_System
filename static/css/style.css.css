@@ -1,0 +1,80 @@
+/* ---------- DASHBOARD STYLES ---------- */
+
+.dashboard-container {
+    max-width: 900px;
+    margin: 60px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-header h2 {
+    color: #0d47a1;
+    margin: 0;
+}
+
+.role-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: white;
+}
+
+.role-patient {
+    background-color: #2e7d32;
+}
+
+.role-driver {
+    background-color: #ef6c00;
+}
+
+.role-admin {
+    background-color: #6a1b9a;
+}
+
+.panel {
+    margin-top: 30px;
+}
+
+.panel h3 {
+    color: #1565c0;
+}
+
+.panel a {
+    display: inline-block;
+    margin: 10px 0;
+    padding: 10px 18px;
+    background: #0d47a1;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.panel a:hover {
+    background: #1565c0;
+}
+
+.logout-btn {
+    margin-top: 30px;
+    text-align: right;
+}
+
+.logout-btn button {
+    background: crimson;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.logout-btn button:hover {
+    background: darkred;
+}

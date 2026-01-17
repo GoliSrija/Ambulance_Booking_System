@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Driver Bookings</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #e3f2fd, #bbdefb);
+            padding: 30px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #0d47a1;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin: 20px auto;
+            width: 700px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            margin: 8px 5px 0 0;
+            padding: 8px 14px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .accept { background: #2e7d32; }
+        .done { background: #6a1b9a; }
+        .gps { background: #ff9800; }
+        .alert {
+    padding: 12px;
+    margin-top: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.alert-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.alert-ontheway {
+    background: #d4edda;
+    color: #155724;
+}
+
+.alert-completed {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.alert-cancelled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+    </style>
+</head>
+
+<body>
+
+<h2>🚑 Driver – Ambulance Bookings</h2>
+
+{% for booking in bookings %}
+    <div class="card">
+
+        <p><strong>Patient:</strong> {{ booking.user.username }}</p>
+        <p><strong>Pickup:</strong> {{ booking.pickup_location }}</p>
+        <p><strong>Drop:</strong> {{ booking.drop_location }}</p>
+
+        <p class="status">
+            <strong>Status:</strong> {{ booking.status }}
+        </p>
+
+        {% if booking.last_location_update %}
+            <p>📍 <strong>Last Update:</strong>
+                {{ booking.last_location_update|date:"M d, Y, h:i a" }}
+            </p>
+        {% endif %}
+        {% if booking.notification_message %}
+    <div class="alert
+        {% if booking.status == 'Pending' %}alert-pending
+        {% elif booking.status == 'On the way' %}alert-ontheway
+        {% elif booking.status == 'Completed' %}alert-completed
+        {% endif %}">
+        🔔 {{ booking.notification_message }}
+    </div>
+{% endif %}
+
+
+
+        <!-- ACTION BUTTONS -->
+
+        {% if booking.status == "Pending" %}
+            <a class="btn accept"
+               href="{% url 'ambulance:accept_booking' booking.id %}">
+                ✅ Accept Booking
+            </a>
+
+        {% elif booking.status == "On the way" %}
+            <a class="btn gps"
+               href="{% url 'ambulance:update_location' booking.id %}">
+                📍 Update Location
+            </a>
+
+            <a class="btn done"
+               href="{% url 'ambulance:update_status' booking.id 'Completed' %}">
+                ✔ Mark Completed
+            </a>
+        {% endif %}
+
+    </div>
+{% empty %}
+    <p style="text-align:center;">No bookings available.</p>
+{% endfor %}
+
+<!-- 🔄 AUTO REFRESH EVERY 10 SECONDS -->
+<script>
+    setTimeout(function () {
+        window.location.reload();
+    }, 10000);
+</script>
+
+</body>
+</html>

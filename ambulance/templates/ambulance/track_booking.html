@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Ambulance Tracking</title>
+
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #e3f2fd;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #0d47a1;
+        }
+
+        #map {
+            height: 450px;
+            width: 80%;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .info {
+            width: 80%;
+            margin: auto;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>🚑 Live Ambulance Tracking</h2>
+
+<div class="info">
+    <p><strong>Status:</strong> {{ booking.status }}</p>
+    <p><strong>ETA:</strong> {{ booking.eta_minutes }} minutes</p>
+    <p><strong>Last Update:</strong> {{ booking.last_location_update }}</p>
+</div>
+
+<div id="map"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    const lat = {{ booking.current_latitude|default:17.385044 }};
+    const lng = {{ booking.current_longitude|default:78.486671 }};
+
+    const map = L.map('map').setView([lat, lng], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const marker = L.marker([lat, lng]).addTo(map)
+        .bindPopup("🚑 Ambulance Location")
+        .openPopup();
+
+    // 🔁 Auto refresh every 5 seconds
+    setTimeout(() => {
+        location.reload();
+    }, 5000);
+</script>
+
+</body>
+</html>

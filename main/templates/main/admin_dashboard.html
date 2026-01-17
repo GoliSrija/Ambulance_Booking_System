@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f8;
+            padding: 30px;
+        }
+        .box {
+            background: white;
+            padding: 20px;
+            margin: 15px;
+            display: inline-block;
+            width: 250px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        h2 { text-align: center; }
+    </style>
+</head>
+<body>
+
+<h2>📊 Admin Dashboard</h2>
+
+<div class="box">Total Bookings: {{ total_bookings }}</div>
+<div class="box">Pending: {{ pending_bookings }}</div>
+<div class="box">Ongoing: {{ ongoing_bookings }}</div>
+<div class="box">Completed: {{ completed_bookings }}</div>
+<div class="box">Cancelled: {{ cancelled_bookings }}</div>
+<div class="box">Drivers: {{ drivers_count }}</div>
+
+</body>
+</html>

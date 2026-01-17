@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Ambulance Bookings</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #e3f2fd, #bbdefb);
+            padding: 30px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #0d47a1;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin: 20px auto;
+            width: 700px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .pending { color: orange; }
+        .ontheway { color: green; }
+        .cancelled { color: red; }
+
+        .btn-cancel {
+            background: red;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .btn-track {
+            background: #1976d2;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+        .alert {
+    padding: 12px;
+    margin-top: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.alert-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.alert-ontheway {
+    background: #d4edda;
+    color: #155724;
+}
+
+.alert-completed {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.alert-cancelled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+    </style>
+</head>
+
+<body>
+
+<h2>📄 My Ambulance Bookings</h2>
+
+{% for booking in bookings %}
+<div class="card">
+
+    <p><strong>Pickup:</strong> {{ booking.pickup_location }}</p>
+    <p><strong>Drop:</strong> {{ booking.drop_location }}</p>
+    <p><strong>Emergency:</strong> {{ booking.emergency_level|title }}</p>
+
+    <p class="status">
+        <strong>Status:</strong>
+        {% if booking.status == "Pending" %}
+            <span class="pending">Pending</span>
+        {% elif booking.status == "On the way" %}
+            <span class="ontheway">On the way</span>
+        {% elif booking.status == "Cancelled" %}
+            <span class="cancelled">Cancelled</span>
+        {% else %}
+            {{ booking.status }}
+        {% endif %}
+    </p>
+
+    {% if booking.eta_minutes %}
+        <p>⏱ <strong>ETA:</strong> {{ booking.eta_minutes }} minutes</p>
+    {% endif %}
+
+    {% if booking.last_location_update %}
+        <p>📍 <strong>Last Update:</strong> {{ booking.last_location_update }}</p>
+    {% endif %}
+    {% if booking.notification_message %}
+    <div class="alert
+        {% if booking.status == 'Pending' %}alert-pending
+        {% elif booking.status == 'On the way' %}alert-ontheway
+        {% elif booking.status == 'Completed' %}alert-completed
+        {% elif booking.status == 'Cancelled' %}alert-cancelled
+        {% endif %}">
+        🔔 {{ booking.notification_message }}
+    </div>
+{% endif %}
+
+
+
+    <!-- ACTION BUTTONS -->
+
+    {% if booking.status == "Pending" %}
+        <a class="btn-cancel"
+           href="{% url 'ambulance:cancel_booking' booking.id %}">
+           ❌ Cancel
+        </a>
+    {% endif %}
+
+    {% if booking.status == "On the way" %}
+        <a class="btn-track"
+           href="{% url 'ambulance:track_booking' booking.id %}">
+           📍 Track Ambulance Live
+        </a>
+    {% endif %}
+
+</div>
+{% empty %}
+<p style="text-align:center;">No bookings found.</p>
+{% endfor %}
+
+<script>
+    // 🔁 Auto refresh every 10 seconds for live updates
+    setTimeout(function () {
+        window.location.reload();
+    }, 10000);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #e3f2fd, #bbdefb);
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            width: 600px;
+            margin: 80px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            color: #0d47a1;
+            text-align: center;
+        }
+
+        h3 {
+            color: #1565c0;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        a {
+            display: block;
+            margin: 10px 0;
+            text-decoration: none;
+            font-size: 16px;
+            color: #0d47a1;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .role {
+            text-align: center;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+        button {
+            background-color: #0d47a1;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1565c0;
+        }
+
+        .logout {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <h2>Welcome to Dashboard</h2>
+
+    <p>Hello, <strong>{{ request.user.username }}</strong> 👋</p>
+
+    {% if request.user.profile and request.user.profile.role == "patient" %}
+        <div class="role">Patient</div>
+    {% elif request.user.profile and request.user.profile.role == "driver" %}
+        <div class="role">Driver</div>
+    {% elif request.user.is_superuser %}
+        <div class="role">Admin</div>
+    {% endif %}
+
+    <hr>
+
+    {% if request.user.profile and request.user.profile.role == "patient" %}
+        <h3>Patient Panel</h3>
+
+        <!-- ✅ CORRECT URL NAME -->
+        <a href="{% url 'ambulance:book' %}">
+            🚑 Book Ambulance
+        </a>
+
+        <a href="{% url 'ambulance:my_bookings' %}">
+            📄 My Bookings
+        </a>
+
+    {% elif request.user.profile and request.user.profile.role == "driver" %}
+        <h3>Driver Panel</h3>
+
+        <a href="{% url 'ambulance:driver_bookings' %}">
+            📋 View Assigned Bookings
+        </a>
+
+    {% elif request.user.is_superuser %}
+        <h3>Admin Panel</h3>
+        <a href="/admin/">⚙️ Admin Dashboard</a>
+
+    {% else %}
+        <p>No role assigned. Contact admin.</p>
+    {% endif %}
+
+    <hr>
+
+    <div class="logout">
+        <form method="post" action="{% url 'users:logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>
